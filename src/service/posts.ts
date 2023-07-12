@@ -30,3 +30,9 @@ export async function getFeaturedPosts(): Promise<Post[]> {
   return getAllPosts() //
     .then((posts) => posts.filter((post) => post.featured));
 }
+
+// data 폴더의 posts.json 파일을 읽어와 featured 가 false 인 Post 타입의 배열을 반환하는 비동기 함수
+export async function getNonFeaturedPosts(): Promise<Post[]> {
+  return getAllPosts() //
+    .then((posts) => posts.filter((post) => !post.featured));
+}

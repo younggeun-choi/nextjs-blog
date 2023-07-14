@@ -10,13 +10,13 @@ export type Post = {
   featured: boolean;
 };
 
-export type PostData = Post & { content: string };
+export type PostData = Post & {
+  content: string;
+  prevPost: Post | null;
+  nextPost: Post | null;
+};
 
-// data 폴더의 posts.json 파일을 읽어와 Post 타입의 배열을 반환하는 비동기 함수
 export const getAllPosts = async (): Promise<Post[]> => {
-  //   const res = await fetch("/data/posts.json");
-  //   const posts: Post[] = await res.json();
-  //   return posts;
   const filePath = path.join(process.cwd(), "data", "posts.json");
   return (
     readFile(filePath, "utf8")
@@ -41,15 +41,18 @@ export async function getNonFeaturedPosts(): Promise<Post[]> {
 
 export async function getPostData(fileName: string): Promise<PostData> {
   const filePath = path.join(process.cwd(), "data", "posts", `${fileName}.md`);
-  const metadata = await getAllPosts().then((posts) =>
-    posts.find((post) => post.path === fileName)
-  );
+  const posts = await getAllPosts();
+  const post = posts.find((post) => post.path === fileName);
 
-  if (!metadata) {
+  if (!post) {
     throw new Error(`No such file: ${fileName}`);
   }
 
+  const index = posts.indexOf(post);
+  const nextPost = index > 0 ? posts[index - 1] : null;
+  const prevPost = index < posts.length - 1 ? posts[index + 1] : null;
+
   const content = await readFile(filePath, "utf8");
 
-  return { ...metadata, content };
+  return { ...post, content, prevPost, nextPost };
 }

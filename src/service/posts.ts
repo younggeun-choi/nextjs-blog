@@ -1,5 +1,6 @@
 import { readFile } from "fs/promises";
 import path from "path";
+import { cache } from "react";
 
 export type Post = {
   title: string;
@@ -16,16 +17,12 @@ export type PostData = Post & {
   nextPost: Post | null;
 };
 
-export const getAllPosts = async (): Promise<Post[]> => {
+export const getAllPosts = cache(async () => {
   const filePath = path.join(process.cwd(), "data", "posts.json");
-  return (
-    readFile(filePath, "utf8")
-      // .then<Post[]>((data) => JSON.parse(data))
-      .then<Post[]>(JSON.parse)
-
-      .then((posts) => posts.sort((a, b) => (a.date > b.date ? -1 : 1))) // 포스팅 시간이 최신순으로 정렬
-  );
-};
+  return readFile(filePath, "utf8")
+    .then<Post[]>(JSON.parse)
+    .then((posts) => posts.sort((a, b) => (a.date > b.date ? -1 : 1))); // 포스팅 시간이 최신순으로 정렬
+});
 
 // data 폴더의 posts.json 파일을 읽어와 featured 가 true 인 Post 타입의 배열을 반환하는 비동기 함수
 export async function getFeaturedPosts(): Promise<Post[]> {

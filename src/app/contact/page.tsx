@@ -1,4 +1,5 @@
 import ContactForm from "@/components/ContactForm";
+import { Metadata } from "next";
 import { AiFillGithub, AiFillYoutube, AiFillLinkedin } from "react-icons/ai";
 
 const LINKS = [
@@ -6,6 +7,12 @@ const LINKS = [
   { icon: <AiFillLinkedin />, url: "" },
   { icon: <AiFillYoutube />, url: "" },
 ];
+
+export const metadata: Metadata = {
+  title: "저에게 연락하세요",
+  description: "YG CHOI에게 연락하세요...",
+};
+
 export default function ContactPage() {
   return (
     <section className="flex flex-col items-center">

@@ -1,4 +1,10 @@
 import Hero from "@/components/Hero";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "나에 대하여",
+  description: "YG CHOI에 대하여...",
+};
 
 const TITLE_CLASS = "text-2xl font-bold text-gray-800 my-2";
 export default function AboutPage() {
